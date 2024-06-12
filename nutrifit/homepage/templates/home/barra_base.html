@@ -1,0 +1,129 @@
+{% load static %}
+<nav class="navbar navbar-custom">
+  <div class="container-fluid">
+    <a class="navbar-brand p-2" href="{% url 'home' %}">
+      <h1 class="display-3" style="font-size: 40px; margin-bottom: -5px">Nutrifit <img src="{% static 'media/nutrifit.png' %}" alt="Logo" width="40px" style="margin-bottom: 5px"></h1>
+      </a>
+
+    {% if user.is_authenticated %}
+    <div class="me-auto">
+      <div class="d-inline-flex align-items-center">
+        <a id="ocultar" class="btn" href="{% url 'misrutinas' %}"><h5 class="display-5">Físico</h5></a>
+        <a id="ocultar" class="btn" href="{% url 'recipesearch' %}"><h5 class="display-5">Nutrición</h5></a>
+      </div>
+    </div>  
+
+    <a class="navbar-brand" type="button" id="boton-nav" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+      <img src="{% static 'media/usuario.png' %}" width="75px" style="border: 5px solid yellowgreen;" height="75px" alt="imagen de perfil" class="rounded-circle">
+    </a>
+    
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title display-5" id="offcanvasNavbarLabel"><b style="color: hsl(271, 76%, 53%);">{{ user.username }}</b></h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="{% url 'home' %}">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="{% url 'perfil' %}">Mi perfil</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="{% url 'misrutinas' %}">Físico</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="{% url 'recipesearch' %}">Nutrición</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="{% url 'logout' %}">Cerrar sesión</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    {% else %}
+    <div>
+      <a class="btn btn-secondary btn-lg" id="registrarse" style="margin-left: 10px;" href="{% url 'register' %}" role="button">Registrate</a>
+      <a class="btn btn-primary btn-lg" id="login" style="margin-left: 10px;" href="{% url 'login' %}" role="button">Login</a>
+    </div>
+    {% endif %}
+  </div>
+</nav>
+
+
+<style>
+  #ocultar{
+    background-color: hsl(271, 76%, 53%);
+    color: white; 
+    font-weight: bold; 
+    margin-left: 30px; 
+    font-size: 18px; 
+    padding: 10px 20px;
+  }
+
+  #ocultar:hover {
+    background-color: hsl(271, 68%, 36%);
+    color: white; 
+    font-weight: bold; 
+    margin-left: 30px; 
+    font-size: 18px; 
+    padding: 10px 20px;
+  }
+  
+  .navbar-custom {
+    background-color: hsl(271, 76%, 53%);
+  }
+
+  .navbar-custom .navbar-brand,
+  .navbar-custom .navbar-text {
+    color: white;
+  }
+
+  .nav-item:hover{
+      background-color: aliceblue;
+    }
+
+  @media screen and (max-width: 767px) {
+    #ocultar{
+      display: none;
+    }
+    .navbar-brand h1 {  
+      font-size: 150% !important; 
+      margin-right: 0px;
+    }   
+    
+    .nav-link.btn {
+      margin-left: -10px !important; 
+      font-size: 9px !important;
+      padding: 2px 6px !important;
+    }
+    .navbar-brand img {
+      width: 30px;
+      height: 30px;
+    }
+    .rounded-circle {
+      width: 60px !important; 
+      height: 60px !important; 
+    }
+  }
+</style>
+
+<script>
+  function ajustarTamagno(){
+    var screenWidth = window.innerWidth
+    var registrarse = document.getElementById("registrarse");
+    var login = document.getElementById("login");
+
+    if (screenWidth <= 767){
+      registrarse.classList.remove("btn-lg");
+      login.classList.remove("btn-lg");
+    }
+    else{
+      registrarse.classList.add("btn-lg");
+      login.classList.add("btn-lg")
+    }
+  }
+  window.onload = ajustarTamagno;
+  window.onresize = ajustarTamagno;
+</script>

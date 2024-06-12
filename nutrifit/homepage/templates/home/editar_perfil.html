@@ -1,0 +1,34 @@
+{% extends 'home/base.html' %}
+{% load static %}
+
+{% block content %}
+  <br><br>  
+  <div class="text-center">
+    <img src="{% static 'media/usuario.png' %}" alt="imagen usuario" width="250px" class="rounded-circle" id="nav-image">
+  </div>
+  <br>
+
+  <form method="POST" action="{% url 'actualizar' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% if form.errors %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <p>Hay errores en el formulario:</p>
+            {% for field in form %}
+                {% if field.errors %}
+                    {{ field.errors }}
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {{ user_form.as_p }}
+    <p>Contraseña: ****** <small><a href="{% url 'cambiar_contrasenha' %}">Cambiar contraseña</a></small></p>
+    {{ profile_form.as_p }}
+
+    <input type="submit" value="Actualizar" class="btn btn-success">
+
+
+  </form>
+
+{% endblock %}

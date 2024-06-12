@@ -1,0 +1,89 @@
+{% extends 'home/base.html' %}
+{% load static %}
+
+{% block content %}
+<br>
+<h1 class="d-flex justify-content-center">PANTALLA REGISTRO DEL USUARIO</h1>
+  <br>
+<div class="d-flex justify-content-center align-items-center">
+  <img  src="{% static 'media/logo_registro.jpg' %}" width="100" height="100">
+</div>
+<br>
+<div class="col-md-6 offset-md-3">
+  <form method="POST" action="{% url 'register' %}">
+    {% csrf_token %}
+      {% if form.errors %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          <p>El formulario tiene errores</p>
+          {% for field in form %}
+            {% if field.errors %}
+              {{ field.errors }}
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endif %}
+      {{ form.as_p }}
+      <input type="submit" value="Registrarse" class="btn btn-secondary">
+
+  </form>
+
+</div>
+
+<!--
+<br>
+<h1 style="text-align: center;"> PANTALLA REGISTRO DEL USUARIO</h1>
+<br>
+<div style="text-align: center;" class="container center">
+  <img src="/nutrifit/homepage/static/media/logo_registro.jpg" width="100" height="100">
+  <form method="POST" action="{% url 'register' %}">
+    {{form.as_p}}
+    <input type="submit" value="Registrarse" class="btn btn-secondary">
+  </form>
+  <form class="form" id="username-input" method="post" style="text-align: center;">
+    <div class="form-container">
+      <div class="form-column">
+        <div class="form-row">
+          <label for="id_username">Nombre de usuario:</label>
+          {{ form.username }}
+        </div>
+        <div class="form-row">
+          <label for="id_password1">Contraseña:</label>
+          {{ form.password1 }}
+        </div>
+        <div class="form-row">
+          <label for="id_password2">Confirmar contraseña:</label>
+          {{ form.password2 }}
+        </div>
+        <div class="form-row">
+          <label for="id_correo">Correo:</label>
+          {{ form.correo }}
+        </div>
+      </div>
+      <div class="form-column">
+        <div class="form-row">
+          <label for="id_sexo">Sexo:</label>
+          {{ form.sexo }}
+        </div>
+        <div class="form-row">
+          <label for="id_estatura">Estatura:</label>
+          {{ form.estatura }}
+        </div>
+        <div class="form-row">
+          <label for="id_peso_deseado">Peso deseado:</label>
+          {{ form.peso_deseado }}
+        </div>
+        <div class="form-row">
+          <label for="id_peso_actual">Peso actual:</label>
+          {{ form.peso_actual }}
+        </div>
+      </div>
+  </div>
+  </form>
+  
+<br>
+<br>
+<form  action="{% url 'login' %}" method="get" style="text-align: center;">
+  <button type="submit" style=" font-size: 20px; margin-left: 20px;  width: 400px; height: 35px;"><b>YA TIENES CUENTA</b></button>
+</form>-->
+{% endblock %}

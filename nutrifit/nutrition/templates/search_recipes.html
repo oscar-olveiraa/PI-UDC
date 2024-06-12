@@ -1,0 +1,210 @@
+{% extends "home/base.html" %}
+
+{% block content %}
+<div class="container my-5 nutrition-container">
+    <div class="header text-center mb-4">
+        <h1>Te ayudamos con tu dieta... ¿Qué platos buscas?</h1>
+    </div>
+    <form method="get">
+        {% csrf_token %}
+        <div class="form-group mb-3">
+            {{ form.nombre }}
+        </div>
+        <div class="row">
+            <div class="col-md-3" style="margin-top: 20px;">
+                <label class="form-label">Tipo de plato:</label>
+                <div class="form-group scrollable-box">
+                    {{ form.tipo_plato }}
+                </div>
+            </div>
+            <div class="col-md-3" style="margin-top: 20px;">
+                <label class="form-label">Tipo de dieta:</label>
+                <div class="form-group scrollable-box">
+                    {{ form.tipo_dieta }}
+                </div>
+            </div>
+            <div class="col-md-3" style="margin-top: 20px;">
+                <label class="form-label">Cocina:</label>
+                <div class="form-group scrollable-box">
+                    {{ form.cocina }}
+                </div>
+            </div>
+            <div class="col-md-3" style="margin-top: 20px;">
+                <label class="form-label">Intolerancias:</label>
+                <div class="form-group scrollable-box">
+                    {{ form.intolerancias }}
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center" >
+            <div class="col-md-3" style="margin-top: 20px;">
+                <div>
+                    <label class="form-label">Tiempo de preparación máximo (minutos):</label>
+                    {% for radio in form.tiempo_preparacion %}
+                        <div class="form-check">
+                            {{ radio.tag }} {{ radio.choice_label }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-md-3" style="margin-top: 20px;">
+                <div>
+                    <label class="form-label">Cantidad máxima de calorías:</label>
+                    {% for radio in form.calorias %}
+                        <div class="form-check">
+                            {{ radio.tag }} {{ radio.choice_label }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-md-3" style="margin-top: 20px;">
+                <div>
+                    <label class="form-label">Buscar según necesidades nutricionales:</label>
+                    {% for radio in form.nutrientes %}
+                        <div class="form-check">
+                            {{ radio.tag }} {{ radio.choice_label }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary btn-submit" style="margin-top: 20px;">Buscar recetas</button>
+    </form>
+
+    {% if recipes %}
+    <div class="container my-5" id="recipe-carousel-container">
+        <div class="header text-center mb-4">
+            <h2>Lo que hemos encontrado para ti:</h2>
+        </div>
+        
+        <div id="recipeCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                {% for recipe in recipes %}
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                        <div class="text-center">
+                            <a href="{% url 'details' recipe.id %}?{{ query_params }}">
+                                <img src="{{ recipe.image }}" class="img-fluid custom-img-size" alt="{{ recipe.title }}">
+                            </a>
+                        </div>
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5>{{ recipe.title }}</h5>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#recipeCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#recipeCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Siguiente</span>
+            </button>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+{% if recipes %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById('recipe-carousel-container').scrollIntoView({ behavior: 'smooth' });
+    });
+</script>
+{% endif %}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll(".form-check input[type='radio']").forEach(function(radio) {
+        radio.addEventListener("click", function(event) {
+            if (this.dataset.clicked) {
+                this.checked = false;
+                this.removeAttribute('data-clicked');
+            } else {
+                document.querySelectorAll(`input[name="${this.name}"]`).forEach(function(radio) {
+                    radio.removeAttribute('data-clicked');
+                });
+                this.setAttribute('data-clicked', 'true');
+            }
+        });
+    });
+});
+</script>
+
+
+<!-- Estilos del formulario -->
+<style>
+    .custom-container {
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .header h1 {
+        color: #8a2ce2;
+    }
+
+    .form-label {
+        font-weight: bold;
+    }
+
+    .form-group label {
+        color: #333;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group .form-check {
+        margin-bottom: 10px;
+    }
+
+    .scrollable-box {
+        max-height: 200px;
+        overflow-y: auto;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #fff;
+    }
+
+    .btn-submit {
+        background-color: #8a2ce2;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+</style>
+
+<!--Estilos del carrusel-->
+<style>
+    .custom-img-size {
+        width: 40%;
+        height: auto;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .carousel-caption h5 {
+        background-color: rgba(0, 0, 0, 0.6);
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 5px;
+    }
+    .carousel-caption p {
+        background-color: rgba(0, 0, 0, 0.6);
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 5px;
+    }
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        filter: invert(100%);
+        outline: black;
+    }
+</style>
+
+{% endblock %}

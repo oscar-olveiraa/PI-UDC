@@ -1,0 +1,72 @@
+{% load static %}
+<nav class="navbar navbar-custom">
+  <div class="container-fluid">
+
+    <a class="navbar-brand p-2" href="{% url 'home' %}">
+      <h1 class="display-3">Nutrifit <img src="{% static 'media/nutrifit.png' %}" alt="Logo" width="50px"></h1>
+    </a>
+
+    {% if user.is_authenticated %}
+      <a class="navbar-brand" type="button" id="boton-nav" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+        <img src="{% static 'media/usuario.jpeg' %}" width="100px" height="100px" alt="imagen de perfil" class="rounded-circle">
+      </a>
+      
+      <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title display-5" id="offcanvasNavbarLabel"><b style="color: hsl(271, 76%, 53%);">{{ user.username }}</b></h5>
+          <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+          <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="{% url 'home' %}">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="{% url 'perfil' %}">Mi perfil</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="{% url 'logout' %}">Cerrar sesion</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+    {% else %}
+        <div>
+            <a class="btn btn-secondary btn-lg" id="registrarse" style="margin-left: 10px;" href="{% url 'register' %}" role="button">Registrate</a>
+            <a class="btn btn-primary btn-lg" id="login" style="margin-left: 10px;" href="{% url 'login' %}" role="button">Login</a>
+        </div>
+    {% endif %}
+  </div>
+</nav>
+
+
+<style>
+    .navbar-custom {
+    background-color: hsl(271, 76%, 53%);
+    }
+
+    .navbar-custom .navbar-brand,
+    .navbar-custom .navbar-text {
+      color: white;
+    }
+</style>
+
+<script>
+  function ajustarTamagno(){
+    var screenWidth = window.innerWidth
+    var registrarse = document.getElementById("registrarse");
+    var login = document.getElementById("login");
+
+    if (screenWidth <= 767){
+      registrarse.classList.remove("btn-lg");
+      login.classList.remove("btn-lg");
+    }
+    else{
+      registrarse.classList.add("btn-lg");
+      login.classList.add("btn-lg")
+    }
+  }
+  window.onload = ajustarTamagno;
+  window.onresize = ajustarTamagno;
+</script>

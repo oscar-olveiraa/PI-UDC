@@ -1,0 +1,25 @@
+{% extends 'home/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="col-md-6 offset-md-3">
+    <h2 class="text-center">Cambiar contraseña</h2>
+    <form method="POST" action="{% url 'cambiar_contrasenha' %}">
+        {% csrf_token %}
+        {% if form.errors %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <p>Your form has errors</p>
+                {% for field in form %}
+                    {% if field.errors %}
+                        {{ field.errors }}
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+        {{ form.as_p }}
+        <input type="submit" value="Cambiar contraseña" class="btn btn-secondary">
+    </form>
+</div>
+
+{% endblock %}

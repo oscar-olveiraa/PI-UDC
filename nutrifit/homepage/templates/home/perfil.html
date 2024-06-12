@@ -1,0 +1,18 @@
+{% extends 'home/base.html' %}
+{% load static %}
+
+{% block content %}
+  <br><br>  
+  <div class="text-center">
+    <img src="{% static 'media/usuario.png' %}" alt="imagen usuario" width="250px" class="rounded-circle" id="nav-image">
+  </div>
+    <h2>Nombre usuario: {{ datos_usuario.user.username}}</h2>
+    <h2>Email: {{datos_usuario.email}}</h2>
+    <h2>Estatura: {{datos_usuario.estatura}} (cm)</h2>
+    <h2>Sexo: {{datos_usuario.sexo}}</h2>
+    <h2>Edad: {{datos_usuario.edad}} Años</h2>
+    <h2>Nivel actividad: {{datos_usuario.nivel_actividad}}</h2>
+    <h2>Peso actual: {{datos_usuario.peso_act}}</h2>
+    <h2>Peso deseado: {{datos_usuario.peso_des}}</h2>
+    <a class="btn btn-primary" role="button" href="{% url 'actualizar' %}">Editar</a>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'home/base.html' %}
+{% load static %}
+
+{% block content %}
+    <br>
+    <div class="col-md-6 offset-md-3">
+    <br><br><br>
+    <h1>Login</h1>
+        <form method="POST">
+            {% csrf_token %}
+          <div class="mb-3">
+           <br>
+            <input type="text" class="form-control" aria-describedby="emailHelp" placeholder="Enter email" name="email">
+          </div>
+          <div class="mb-3">
+            <input type="password" class="form-control" name="password" placeholder="Enter password">
+          </div>
+          <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+    </div>
+    
+{% endblock %}

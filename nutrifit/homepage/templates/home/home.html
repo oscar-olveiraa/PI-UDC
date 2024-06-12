@@ -1,0 +1,202 @@
+{% extends 'home/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+  .box-common {
+    background-color: black;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    border: 4px solid hsl(271, 76%, 53%);
+    padding: 10px;
+  }
+
+  @media (max-width: 50px) {
+      .box-common {
+        font-size: 13px;
+        max-height: 50px;
+      }
+  }
+
+</style>
+
+{% if user.is_authenticated %}
+<br><br>  
+<p class="display-1 text-center">Bienvenido de nuevo <b style="color: hsl(271, 76%, 53%);">{{user.username}}</b></p>
+<br>
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-4 col-md-6 mb-4">
+      <div class="box box-common">
+        <p style="margin: 0;">Peso:
+          <span style="color: green;">{{ user.usuarioapp.peso_act }}</span>
+        </p>
+      </div>       
+    </div>
+    <div class="col-lg-4 col-md-6 mb-4">
+      <div class="box box-common">
+        <p style="margin: 0;">IMC:
+          {% if imc > 34.9 %} 
+            <span style="color: red;">{{ imc }}</span>
+          {% elif imc > 25 %}
+            <span style="color: yellow">{{ imc }}</span>
+          {% elif imc > 18.5 %}
+            <span style="color: green">{{ imc }}</span>
+          {% elif imc > 17 %}
+            <span style="color: yellow">{{ imc }}</span>
+          {% else %}
+            <span style="color: red">{{ imc }}</span>
+          {% endif %}
+        </p>
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-6 mb-4">
+      <div class="box box-common">
+        <p style="margin: 0;">Calorías quemadas hoy: 
+          <span style="color: rgb(89, 255, 0);">{{ calorias }}</span>
+        </p>
+      </div>       
+    </div>     
+  </div>
+  <br>
+  <div class="text-center ">
+    <form method="POST" class="row justify-content-center" action="{% url 'home' %}" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="col-auto">
+        {{pesoForm.as_p}}
+      </div>
+      <div class="col-auto">
+        <input type="submit" value="Nuevo peso" name="peso" class="btn btn-secondary">
+      </div>
+    </form>
+  </div>
+
+  <h1 class="text-center">Progreso hacia los {{ request.user.usuarioapp.peso_des }} kilos!!!</h1>
+  <div class="progress" role="progressbar"  aria-label="Animated striped example" aria-valuenow="{{ progreso }}" aria-valuemin="0" aria-valuemax="{{ progreso }}">
+    <div class="progress-bar progress-bar-striped progress-bar-animated" style="background-color: #8a2ce2; width: {{ progreso }}%">{{ progreso }}%</div>
+  </div>
+</div>
+<h1 class="display-3 text-center" style="color: #8a2ce2; margin-top: 10%;">Estadísticas del peso</h1>
+
+<div class="text-center">
+  <form method="POST" class="row justify-content-center" action="{% url 'home' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% for field in fechas %}
+      <div class="col-auto">
+        <div class="row justify-content-center align-items-center">
+          <div class="col-auto">
+            {{ field.label_tag }}
+          </div>
+          <div class="col-auto" style="margin-left: -5%;">
+            {{ field }}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+    <div class="row justify-content-center" style="margin-top: 25px;">
+      <input type="submit" value="Actualizar intervalo" name="fechas" class="btn btn-secondary col-auto">
+    </div>
+  </form>
+</div>
+<br>
+
+<div class="container">
+  <div class="row">
+      <div class="col-12 col-md-6 col-lg-3 mb-4 d-flex justify-content-center">
+          <div class="card" style="width: 18rem;">
+              <div class="card-body">
+                  <h1 class="card-title text-center" style="color: #8a2ce2;">Mínimo</h1>
+                  <h3 class="card-text text-center">{{ datos_peso.Minimo }} Kilos</h3>
+              </div>
+          </div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-3 mb-4 d-flex justify-content-center">
+          <div class="card" style="width: 18rem;">
+              <div class="card-body">
+                  <h1 class="card-title text-center" style="color: #8a2ce2;">Máximo</h1>
+                  <h3 class="card-text text-center">{{ datos_peso.Maximo }} Kilos</h3>
+              </div>
+          </div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-3 mb-4 d-flex justify-content-center">
+          <div class="card" style="width: 18rem;">
+              <div class="card-body">
+                  <h1 class="card-title text-center" style="color: #8a2ce2;">Media</h1>
+                  <h3 class="card-text text-center">{{ datos_peso.Media }} Kilos</h3>
+              </div>
+          </div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-3 mb-4 d-flex justify-content-center">
+          <div class="card" style="width: 18rem;">
+              <div class="card-body">
+                  <h1 class="card-title text-center" style="color: #8a2ce2;">Mediana</h1>
+                  <h3 class="card-text text-center">{{ datos_peso.Mediana }} Kilos</h3>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+<div class="text-center">
+  <img src="{% static 'grafica_peso_' %}{{ user.username }}{{ extension_temp }}.png" class="img-fluid" alt="Imagen peso corporal">
+</div>
+
+<br><br><br>
+<h1 class="display-3 text-center" style="color: #8a2ce2;">Estadísticas de calorías diarias gastadas</h1>
+<br>
+<div class="container">
+  <div class="row">
+      <div class="col-12 col-md-6 col-lg-3 mb-4 d-flex justify-content-center">
+          <div class="card" style="width: 18rem;">
+              <div class="card-body">
+                  <h1 class="card-title text-center" style="color: #8a2ce2;">Mínimo</h1>
+                  <h3 class="card-text text-center">{{ datos_tdee.Minimo }} kcal</h3>
+              </div>
+          </div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-3 mb-4 d-flex justify-content-center">
+          <div class="card" style="width: 18rem;">
+              <div class="card-body">
+                  <h1 class="card-title text-center" style="color: #8a2ce2;">Máximo</h1>
+                  <h3 class="card-text text-center">{{ datos_tdee.Maximo }} kcal</h3>
+              </div>
+          </div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-3 mb-4 d-flex justify-content-center">
+          <div class="card" style="width: 18rem;">
+              <div class="card-body">
+                  <h1 class="card-title text-center" style="color: #8a2ce2;">Media</h1>
+                  <h3 class="card-text text-center">{{ datos_tdee.Media }} kcal</h3>
+              </div>
+          </div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-3 mb-4 d-flex justify-content-center">
+          <div class="card" style="width: 18rem;">
+              <div class="card-body">
+                  <h1 class="card-title text-center" style="color: #8a2ce2;">Mediana</h1>
+                  <h3 class="card-text text-center">{{ datos_tdee.Mediana }} kcal</h3>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+<div class="text-center">
+  <img src="{% static 'grafica_tdee_' %}{{ user.username }}{{ extension_temp }}.png" class="img-fluid" alt="Imagen peso corporal">
+</div>
+
+{% else %}
+<br><br>  
+<p class="display-1 text-center">Bienvenido a Nutrifit</p>
+<br>
+  <p>
+    <h2>Página web para ver el registro de tu salud y hacer rutinas de ejercicios <br>de forma <b>fácil</b> e <b>intuitiva</b></h2>
+  </p>
+{% endif %}
+{% endblock %}
+
+
+

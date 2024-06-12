@@ -1,0 +1,67 @@
+{% extends "home/base.html" %}
+
+{% load static %}
+
+{% block content %}
+    <div class="container my-5" style="background-color: #fae7c0; padding: 20px; border-radius: 10px;">
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <a href="{% url 'recipesearch' %}?{{ request.GET.urlencode }}" class="btn btn-secondary" style="background-color:#8a2ce2; color: white;">
+                    &larr; Volver
+                </a>
+            </div>
+        </div>
+        <div class="header text-center mb-4">
+            <h2>{{ recipe.title }}</h2>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <img src="{{ recipe.image }}" class="img-fluid" alt="{{ recipe.title }}">
+            </div>
+            <div class="col-md-6">
+                <h5>Tiempo de cocinado: {{ recipe.readyInMinutes }} minutos</h5>
+                <h5>Intolerancias: {{ recipe.intolerances|join:", " }}</h5>
+                <h5>Health score: {{ recipe.healthScore }}</h5>
+                <h5>Más detalles:</h5>
+                <p>{{ recipe.summary|safe }}</p>
+            </div>
+        </div>
+        <div class="mt-4">
+            <h4>Ingredientes:</h4>
+            <ul>
+                {% for ingredient in recipe.extendedIngredients %}
+                    <li>{{ ingredient.original }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="mt-4">
+            <h4>Información nutricional:</h4>
+            <img src="{% static 'grafica_nutrientes_' %}{{ recipe.id }}.png" class= "image-fluid" alt="Quesito de nutricion">
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener("pagehide", function() {
+            fetch("{% url 'delete_grafica' recipe_id=recipe.id %}", {
+                method: "DELETE",
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}"
+                }
+            }).then(response => {
+                if (!response.ok) {
+                    console.error('Error deleting the file:', response.statusText);
+                }
+                return response.json();
+            }).then(data => {
+                if (data.status === 'success') {
+                    console.log('File deleted successfully');
+                } else {
+                    console.error('Error:', data.message);
+                }
+            }).catch(error => {
+                console.error('Fetch error:', error);
+            });
+        });
+    </script>
+
+{% endblock %}

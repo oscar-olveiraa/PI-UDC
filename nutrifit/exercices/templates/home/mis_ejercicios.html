@@ -1,0 +1,117 @@
+{% extends 'home/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+.small-card {
+    width: 8rem;
+    background-color: #1b26ec;
+}
+
+.small-card h1 {
+    font-size: 1.5rem;
+}
+
+.volver {
+    position: absolute;
+    left: 30px;
+    top: 150px;
+}
+.hidden {
+    display: none;
+}
+.table-container {
+    overflow-x: auto;
+}
+.day-button {
+    border: 1px solid #ddd;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background-color: #f9f9f9;
+}
+
+.table {
+    margin-top: 1rem;
+    width: 100%;
+    margin-bottom: 1rem;
+    border-collapse: collapse;
+}
+.table th, .table td {
+    border: 1px solid #ddd;
+    padding: 7px;
+    text-align: center;
+}
+.table th {
+    background-color: #f2f2f2;
+}
+</style>
+
+<script>
+function desplegableDia(dayId) {
+    var content = document.getElementById(dayId);
+    if (content.style.display === "none" || content.style.display === "") {
+        content.style.display = "block";
+    } else {
+        content.style.display = "none";
+    }
+}
+</script>
+
+<br><br>  
+<div class="volver">
+    <div class="card small-card">
+        <a class="card-body text-center" href="{% url 'misrutinas' %}" style="text-decoration: none;">
+            <h1 class="card-title" style="color: white;"> Volver </h1>
+        </a>
+    </div>
+</div>
+
+<p class="display-3 text-center" style="color: hsl(271, 76%, 53%);">Mis rutinas</p>
+<br>
+
+<div class="container">
+    {% for dia, ejercicios in ejercicios_por_dia.items %}
+        <div class="day-button">
+            <button class="btn btn-primary btn-block" onclick="desplegableDia('{{ dia|slugify }}')">
+                {{ dia }}
+            </button>
+            <div id="{{ dia|slugify }}" class="hidden">
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Músculo</th>
+                                <th>Ejercicio</th>
+                                <th>Intensidad</th>
+                                <th>Series</th>
+                                <th>Repeticiones</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for ejercicio in ejercicios %}
+                                <tr>
+                                    <td>{{ ejercicio.muscles }}</td>
+                                    <td>{{ ejercicio.workout }}</td>
+                                    <td>{{ ejercicio.intensity }}</td>
+                                    <td>{{ ejercicio.sets }}</td>
+                                    <td>{{ ejercicio.reps_min }} - {{ ejercicio.reps_max }}</td>
+                                    <td>
+                                        <div class="card small-card">
+                                            <a class="card-body text-center" href="{% url 'editarutina' ejercicio.id %}" style="text-decoration: none;">
+                                                <h1 class="card-title" style="color: white; font-size: 1rem;">Editar</h1>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

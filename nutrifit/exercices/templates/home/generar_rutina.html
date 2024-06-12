@@ -1,0 +1,138 @@
+{% extends 'home/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<script>
+    let selectedIntensity = '{{ intensidad_predeterminada }}';
+
+    function selectIntensity(value) {
+        selectedIntensity = value;
+        document.getElementById('id_choice').value = value;
+
+        document.querySelectorAll('.intensity-button').forEach(button => {
+            button.classList.remove('selected');
+        });
+
+        document.querySelector(`button[intensity-value='${value}']`).classList.add('selected');
+    }
+
+    function addRutine() {
+        const container = document.getElementById('blocks-container');
+        const newBlock = document.createElement('div');
+        newBlock.className = 'block';
+
+        const selectedIntensityText = document.querySelector(`button[intensity-value='${selectedIntensity}']`).innerText;
+        const selectedDay = document.getElementById('id_dia');
+        const selectedDayText = selectedDay.options[selectedDay.selectedIndex].text;
+        const selectedMuscle = document.getElementById('id_musculo');
+        const selectedMuscleText = selectedMuscle.options[selectedMuscle.selectedIndex].text;
+
+        newBlock.innerHTML = `
+            <div class="day-block">
+                <div class="block-info">
+                    <p class="block-day" style="font-weight: bold;">${selectedDayText}</p>
+                    <p class="block-intensity">Intensidad: ${selectedIntensityText}</p>
+                    <p class="block-muscle">Músculo: ${selectedMuscleText}</p>
+                </div>
+                <div class="block-controls">
+                    <input type="hidden" name="musculos[]" value="${selectedMuscle.value}">
+                    <input type="hidden" name="dias[]" value="${selectedDay.value}">
+                    <input type="hidden" name="intensidades[]" value="${selectedIntensity}">
+                    <button type="button" onclick="removeRutine(this)" style="color: red;">Eliminar</button>
+                </div>
+            </div>
+        `;
+        container.appendChild(newBlock);
+    }
+
+    function removeRutine(button) {
+        const block = button.closest('.block');
+        block.remove();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        if (selectedIntensity) {
+            selectIntensity(selectedIntensity);
+        }
+    });
+</script>
+
+<style>
+    .block {
+        border: 1px solid black;
+        margin: 10px;
+        padding: 10px;
+    }
+    .day-block {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .block-info {
+        flex-grow: 1;
+    }
+    
+    .block-controls {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .small-card {
+        width: 10rem;
+        background-color: #1b26ec;
+        margin-left: 10px;
+    }
+    .small-card h1 {
+        font-size: 1.5rem;
+    }
+    .intensity-button {
+        margin: 5px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        background-color: #f8f9fa;
+        cursor: pointer;
+    }
+    .intensity-button.selected {
+        background-color: #6c757d;
+        color: white;
+    }
+</style>
+
+<br><br>  
+<div class="container mt-1 d-flex align-items-center">
+    <p class="display-3 mx-auto text-center" style="color: hsl(271, 76%, 53%); margin: 0;">¡Vamos a crear una rutina!</p>
+    <div class="card small-card ml-auto">
+        <a class="card-body text-center" href="{% url 'misejercicios' %}" style="text-decoration: none;">
+            <h1 class="card-title" style="color: white;">Rutinas</h1>
+        </a>
+    </div>
+</div>
+<br><br>
+
+
+<div class="container mt-6 align-items-center">
+    <div class="display-6 text-center">
+        {% csrf_token %}
+        {% for value, label in form.fields.intensidad.choices %}
+            <button type="button" class="intensity-button" intensity-value="{{ value }}" onclick="selectIntensity('{{ value }}')">{{ label }}</button>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="container">
+    <form method="post" class="display-6 text-center" style="margin-top: 20px;">
+        {% csrf_token %}
+        <input type="hidden" id="id_choice" name="intensidad" value="{{ intensidad_predeterminada }}">
+        <div>
+            {{ form.dia }}
+            {{ form.musculo }}
+            <button type="button" onclick="addRutine()">Añadir Rutina</button>
+        </div>
+        <div class="container" id="blocks-container"></div>
+        <input type="submit" value="Generar" class="btn btn-success">
+    </form>
+</div>
+
+{% endblock %}

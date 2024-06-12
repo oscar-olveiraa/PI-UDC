@@ -1,0 +1,57 @@
+{% extends 'home/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .small-card {
+        width: 8rem;
+        background-color: #1b26ec;
+    }
+
+    .small-card h1 {
+        font-size: 1.5rem;
+    }
+    .volver {
+        position: absolute;
+        left: 30px;
+        top: 150px;
+    }
+    .button-container {
+        display: flex;
+        justify-content: flex-start;
+        gap: 1rem; 
+        margin-top: 1rem; 
+    }
+    .form-container {
+        margin-bottom: 2rem;
+    }
+</style>
+
+<div class="volver">
+    <div class="card small-card">
+        <a class="card-body text-center" href="{% url 'misejercicios' %}" style="text-decoration: none;">
+            <h1 class="card-title" style="color: white;"> Volver </h1>
+        </a>
+    </div>
+</div>
+
+<p class="display-3 text-center" style="color: hsl(271, 76%, 53%);">Editar Ejercicio</p>
+<br>
+
+<div class="container">
+    <div class="form-container">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-success">Guardar cambios</button>
+        </form>
+    </div>
+    <div class="button-container">
+        <form method="post" action="{% url 'eliminarutina' ejercicio.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Eliminar ejercicio</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
