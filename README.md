@@ -1,3 +1,107 @@
+## **Nombre Proyecto: Nutrifit**
+
+El proyecto consiste en una aplicación web relacionada con la salud y el fitness. Partiendo de
+los datos iniciales del usuario (altura, peso...) se hará un análisis para saber qué tipo de dieta
+se le recomienda para poder obtener una buena salud. Al mismo tiempo, se irán guardando
+los datos de progresión del mismo con el fin de mostrarle un seguimiento del progreso. A parte
+de todo esto, el usuario va a poder crear unas rutinas semanales basadas en su condición
+física. 
+
+### Funcionalidades:
+
+- **Soporte para usuarios:**
+El usuario va poder registrarse rellenando una serie de campos (fecha de nacimiento,
+peso, sexo...) e iniciar sesión introduciendo un nombre de usuario y su contraseña en
+los campos que corresponden y pulsar el botón ‘Iniciar Sesión’.
+
+- **Histórico de progreso:**
+Se llevará un histórico de cómo progresa la condición del usuario a lo largo del tiempo.
+Este histórico tendrá datos como el peso, las calorías que necesita consumir y demás datos
+relacionados con la salud de la persona.
+
+- **Mostrar datos estadísticos del histórico:**
+El usuario podrá ver una serie de datos (valores máximos y mínimos de parámetros
+en un intervalo de tiempo, la media de peso en un periodo...). Estos datos se calculan
+a partir del histórico guardado.
+
+- **Gráficas que muestren el progreso:**
+El usuario podrá ver la progresión del histórico con una serie de gráficas.
+
+- **Recomendación de recetas:**
+Se le recomendarán recetas al usuario, basadas en el tipo de comida que quiera comer,
+sus intolerancias y el tipo de dieta (vegetariana, vegana...), entre otros, o en base a sus
+necesidades de micronutrientes (proteínas,  calcio, sodio...) extraídas del histórico del
+usuario. Además, pueden verse los detalles de cada receta, incluyendo un gráfico con su
+información nutricional.
+
+- **Creación de rutinas semanales:**
+Se creará una rutina semanal de ejercicios variados, teniendo en cuenta la condición física
+del usuario.
+
+
+### Cumplimiento de requisitos:
+
+- En cuanto a los requisitos obligatorios, el proyecto cumple con todo lo pedido: Se trata de una **aplicación
+  web**, desarrollada en el **framework _Django_** y escrita en **Python siguieno el patrón _Model-View-Template_**, en la
+  que se realizan constantes **consultas a APIs** y se hace algún **análisis de datos con Pandas**. Además, ha sido
+  desarrollada usando **git como control de versiones** y está **plenamente _dockerizada_**. Por último, también se han
+  realizado **tests** para cada una de las tres aplicaciones (Funcionalidades) principales y se han realizado
+  **reuniones de control** de progreso habituales (Periodo de ~3 días) en las que también **se ha ido anotando las
+  horas de trabajo** realizadas por los miembros de este proyecto.
+
+- Por otra parte, se han abarcado una gran cantidad de objetivos deseables. En primer lugar, 
+
+
+## **Integrantes Grupo:**
+
+  * Alejandro Fernández Otero  <alejandro.fernandezo@udc.es>
+  * Alejandro Javier Herrero Arango  <a.j.herrero@udc.es>
+  * Óscar Olveira Miniño  <oscar.olveira@udc.es>
+  
+
+## **Inicio automatizado**
+1) Clonar el repositorio:
+ ```git clone https://github.com/GEI-PI-614G010492324/aplicacion-django-olveira_fernandez_herrero.git```
+2) ```cd aplicacion-django-olveira_fernandez_herrero```
+3) Ejecutar el script: ```./setup.sh```
+
+Tras esto la aplicación es completamente funcional. Para acceder a ella ir a http://localhost:8000
+
+**Importante**: Una vez ejecutado el script, si se quisiese iniciar los contenedores de docker desde Visual Studio Code sería necesario ejecutar ```./setup.sh clean``` para eliminar los contenedores creados previamente y evitar conflictos.
+
+## **Una vez terminado**
+Se puede eliminar la aplicación haciendo ```./setup.sh clean```. Esto eliminará los contenedores, imagenes y volumenes que estuviese usando la aplicación.
+
+
+
+### Ejecución de los tests:
+
+
+## **Problemas conocidos:**
+
+- En la parte de generar rutinas, hay algunos musculos que no tienen ejercicios específicos para una intensidad por lo que no se muestran en el calendario. Una posible solucion seria
+  comprobar si para la intensidad que especifica el usuario, aparezcan solamente los musculos que tienen ejercicios con esa intensidad 
+
+
+## **Posibles mejoras:**
+
+- La API de spoonacular contiene no solo recetas, sino también ingredientes y operaciones para manejarlos,
+  permitiendo la posibilidad de que los usuarios creen sus propios platos añadiendo o eliminando ingredientes
+  mientras ven como va cambiando la informacion nutricional y la cantidad de calorías. Esto podría permitir que
+  los usuarios crearan sus propios calendarios semanales de comida, bien con recetas ya existentes en spoonacular
+  o con las suyas propias.
+
+- Debido a carencias en el funcionamiento en la API de salud, usada principalmente en homepage, guardamos un
+  histórico de micronutrientes. Creemos que sería bastante más útil que se guardaran más bien nutrientes más grandes,
+  como hidratos de carbono, proteínas o grasas y no sodio, calcio o hierro, entre otros, que la gente no suele
+  fijarse tanto en ellos.
+
+
+---------------------------------------------------------------------------------------
+
+#             TUTORIAL INSTALACION ENTORNO PRACTICAS 
+
+
 # Visual Studio Code Tutorial
 
 En este tutorial vamos a ver cómo configurar Visual Studio Code así como sus principales funcionalidades. Para un mayor aprovechamiento en la asignatura enfocaremos este tutorial a entorno de programación Python. Más específicamente, al finalizar el mismo tendréis configurado un entorno de desarrollo preparado para un proyecto Django con vistas a la práctica a realizar.
