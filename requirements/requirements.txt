@@ -1,0 +1,8 @@
+django==4
+django-crispy-forms
+oauth2
+Pillow
+psycopg2
+requests
+pandas
+matplotlib
