@@ -76,6 +76,10 @@ Se puede eliminar la aplicación haciendo ```./setup.sh clean```. Esto eliminar�
 
 ### Ejecución de los tests:
 
+`python3 manage.py tests` -> esto executa todos os tests
+
+`python3 manage.py tests exercices.test` -> esto executa os tests da app de exercices
+
 
 ## **Problemas conocidos:**
 
